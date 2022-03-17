@@ -1,5 +1,8 @@
 import './App.css'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { Button } from "./button";
+import { Input } from "./input"
+import { Answer } from './answer'
 
 const URL = 'https://api.genderize.io'
 
@@ -24,29 +27,26 @@ function FormSend() {
     async function saveGender(e) {
         e.preventDefault()
         const result = await getGender(name)
-        if (!result.gender) return
+        if (!result.gender) return setName('')
         setGender(result.gender)
         setUser(result.name + ' is')
+        setName('')
     }
 
     return (
         <div>
             <form action="#" className="gender__form">
-                <input
-                    onChange={saveName}
-                    placeholder="Enter your name..."
-                    type="text"
-                    className='gender__input'
+                <Input
+                    saveName={saveName}
+                    value={name}
                 />
                 <br/>
-                <button
-                    onClick={saveGender}
-                    type="submit"
-                    className="gender__button">
-                    Send
-                </button>
+                <Button saveGender={saveGender}/>
             </form>
-            <p>Gender: {user} <span className="gender__answer">{gender}</span></p>
+            <Answer
+                user={user}
+                gender={gender}
+            />
         </div>
     )
 }
